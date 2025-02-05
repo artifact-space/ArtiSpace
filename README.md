@@ -1,4 +1,4 @@
-![](assets/20250205_124228_logo_8.png)
+![](docs/assets/20250205_124228_logo_8.png)
 
 # ArtiSpace
 
@@ -20,7 +20,7 @@ ArtiSpace features a simple and layered architecture designed for clarity and sc
 At a high level, it consists of four layers:
 
 
-![](assets/20250205_124318_ArtiSpace_Architecture.drawio.png)
+![](docs/assets/20250205_124318_ArtiSpace_Architecture.drawio.png)
 
 1. API Layer – Handles incoming requests and exposes RESTful endpoints.
 2. Application Layer – Contains ArtiSpace's core logic.

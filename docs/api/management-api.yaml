@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: ArtiSpace Management API
+  version: 1.0.0
+  description: API for managing repositories, users, and access.
+servers:
+  - url: https://localhost:8080/api/v1
+    description: Production server
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+paths:
+  /repository/{repository_type}/{package_type}:
+    post:
+      summary: Create a repository
+      parameters:
+        - name: repository_type
+          in: path
+          required: true
+          description: Type of repository (proxy, local, virtual)
+          schema:
+            type: string
+            enum: [proxy, local, virtual]
+        - name: package_type
+          in: path
+          required: true
+          description: Package format (maven, docker, npm, pypi)
+          schema:
+            type: string
+            enum: [maven, docker, npm, pypi]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Repository created
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid request data
+
+    get:
+      summary: Get repositories by repository_type and package_type
+      parameters:
+        - name: repository_type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [proxy, local, virtual]
+        - name: package_type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [maven, docker, npm, pypi]
+      responses:
+        '200':
+          description: Repository details
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Repository not found
+
+  /repository/{repository_type}:
+    get:
+      summary: List all repositories by type
+      parameters:
+        - name: repository_type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [proxy, local, virtual]
+      responses:
+        '200':
+          description: List of repositories by type
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /repository/{repository_id}:
+    get:
+      summary: Get repository details by ID
+      parameters:
+        - name: repository_id
+          in: path
+          required: true
+          description: Unique identifier of the repository
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Repository details
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Repository not found
+
+    put:
+      summary: Update repository details
+      parameters:
+        - name: repository_id
+          in: path
+          required: true
+          description: Unique identifier of the repository
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Repository updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid request data
+        '404':
+          description: Repository not found
+
+    delete:
+      summary: Delete repository by ID
+      parameters:
+        - name: repository_id
+          in: path
+          required: true
+          description: Unique identifier of the repository
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Repository deleted successfully
+        '404':
+          description: Repository not found
+
+    head:
+      summary: Check if repository exists
+      parameters:
+        - name: repository_id
+          in: path
+          required: true
+          description: Unique identifier of the repository
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Repository exists
+        '404':
+          description: Repository not found

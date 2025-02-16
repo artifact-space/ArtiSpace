@@ -24,10 +24,10 @@ paths:
         - name: package_type
           in: path
           required: true
-          description: Package format (maven, docker, npm, pypi)
+          description: Package format (maven, npm, pypi)
           schema:
             type: string
-            enum: [maven, docker, npm, pypi]
+            enum: [maven, npm, pypi]
       requestBody:
         required: true
         content:
@@ -58,7 +58,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: [maven, docker, npm, pypi]
+            enum: [maven, npm, pypi]
       responses:
         '200':
           description: Repository details
@@ -163,5 +163,204 @@ paths:
       responses:
         '200':
           description: Repository exists
+        '404':
+          description: Repository not found
+
+  /docker/namespaces:
+    post:
+      summary: Create a new namespace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Namespace created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid input
+    get:
+      summary: Get all namespaces
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            example: 0
+      responses:
+        '200':
+          description: List of namespaces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /docker/namespaces/{namespace_id}:
+    get:
+      summary: Get a namespace
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Namespace details
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Namespace not found
+    put:
+      summary: Update a namespace
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Namespace updated successfully
+        '404':
+          description: Namespace not found
+    delete:
+      summary: Delete a namespace
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Namespace deleted successfully
+        '404':
+          description: Namespace not found
+
+  /docker/namespaces/{namespace_id}/repositories:
+    post:
+      summary: Create a repository under a namespace
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Repository created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Namespace not found
+    get:
+      summary: Get all repositories under a namespace
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of repositories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /docker/namespaces/{namespace_id}/repositories/{repository_id}:
+    get:
+      summary: Get a repository
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: repository_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Repository details
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Repository not found
+    put:
+      summary: Update a repository
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: repository_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Repository updated successfully
+        '404':
+          description: Repository not found
+    delete:
+      summary: Delete a repository
+      parameters:
+        - name: namespace_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: repository_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Repository deleted successfully
         '404':
           description: Repository not found
